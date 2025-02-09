@@ -1,0 +1,39 @@
+{
+  "name": "ticket-manager",
+  "version": "1.0.0",
+  "description": "This is a online ticket manager",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon server.js",
+    "db:migrate": "npx sequelize-cli db:migrate --config config/config.js",
+    "db:seed": "npx sequelize-cli db:seed:all --config config/config.js",
+    "test": "jest --coverage"
+  },
+  "author": "Yasiru Nilan",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "http-status-codes": "^2.3.0",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
+    "sequelize": "^6.37.5",
+    "sqlite3": "^5.1.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.9",
+    "supertest": "^7.0.0"
+  }
+}
