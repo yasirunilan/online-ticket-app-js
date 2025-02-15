@@ -1,8 +1,6 @@
 import { NotFoundError } from "../utils/appError.js";
 import sequelize from "../db/database.js";
-import Booking from "../models/booking.js";
-import Event from "../models/event.js";
-import WaitingList from "../models/waitingList.js";
+import { OnlineEvent, Booking, WaitingListEntry } from "../models/associations.js";
 import { BookingStatus } from "../utils/enums.js";
 
 export class BookingService {
@@ -12,8 +10,8 @@ export class BookingService {
     // start transaction
     const transaction = await sequelize.transaction();
     try {
-      const event = await Event.findByPk(eventId, { transaction });
-    
+      const event = await OnlineEvent.findByPk(eventId, { transaction });
+
       if (!event) {
         throw new NotFoundError("Event not found");
       }
@@ -27,7 +25,7 @@ export class BookingService {
         await transaction.commit();
         return booking;
       } else {
-        const waitingListEntry = await WaitingList.create(
+        const waitingListEntry = await WaitingListEntry.create(
           { userId, eventId },
           { transaction }
         );
@@ -52,18 +50,21 @@ export class BookingService {
     const transaction = await sequelize.transaction();
 
     try {
-      const booking = await Booking.findOne({where: {id: bookingId, userId}}, { transaction });
+      const booking = await Booking.findOne(
+        { where: { id: bookingId, userId } },
+        { transaction }
+      );
 
       if (!booking) {
         throw new NotFoundError("Booking not found");
       }
 
-      const event = await Event.findByPk(booking.eventId, { transaction });
+      const event = await OnlineEvent.findByPk(booking.eventId, { transaction });
 
       booking.status = BookingStatus.CANCELLED;
       await booking.save({ transaction });
 
-      const waitingListEntry = await WaitingList.findOne({
+      const waitingListEntry = await WaitingListEntry.findOne({
         where: { eventId: event.id },
         order: [["createdAt", "ASC"]],
         transaction,

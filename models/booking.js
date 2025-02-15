@@ -1,46 +1,24 @@
-"use strict";
-import { Model } from "sequelize";
+import { DataTypes } from "sequelize";
+import sequelize from "../db/database.js";
 import { BookingStatus } from "../utils/enums.js";
-export default (sequelize, DataTypes) => {
-  class Booking extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
-  }
-  Booking.init(
-    {
-      eventId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: "Events",
-          key: "id",
-        },
-      },
-      userId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: "Users",
-          key: "id",
-        },
-      },
-      status: {
-        type: BookingStatus,
-        allowNull: false,
-        defaultValue: BookingStatus.CONFIRMED,
-      },
+const Booking = sequelize.define(
+  "Booking",
+  {
+    eventId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
-    {
-      sequelize,
-      modelName: "Booking",
-      tableName: "bookings",
-    }
-  );
-  return Booking;
-};
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    status: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: BookingStatus.CONFIRMED,
+    },
+  },
+  { tableName: "bookings" }
+);
+
+export default Booking;

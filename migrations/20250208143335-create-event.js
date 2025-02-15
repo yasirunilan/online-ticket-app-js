@@ -1,7 +1,7 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
 export async function up(queryInterface, Sequelize) {
-  await queryInterface.createTable('events', {
+  await queryInterface.createTable('online_events', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -36,5 +36,5 @@ export async function up(queryInterface, Sequelize) {
   });
 }
 export async function down(queryInterface, Sequelize) {
-  await queryInterface.dropTable('events');
+  await queryInterface.dropTable('online_events');
 }

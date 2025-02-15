@@ -1,57 +1,43 @@
-"use strict";
-import { Model } from "sequelize";
+import { DataTypes } from "sequelize";
+import sequelize from "../db/database.js";
 import bcrypt from "bcryptjs";
 
-export default (sequelize, DataTypes) => {
-  class User extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
-  }
-  User.init(
-    {
-      email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
+const User = sequelize.define(
+  "User",
+  {
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  },
+  {
+    tableName: "users",
+    hooks: {
+      beforeCreate: async (user) => {
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(user.password, salt);
       },
-      firstName: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      lastName: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      beforeUpdate: async (user) => {
+        if (user.changed("password")) {
+          const salt = await bcrypt.genSalt(10);
+          user.password = await bcrypt.hash(user.password, salt);
+        }
       },
     },
-    {
-      sequelize,
-      modelName: "User",
-      tableName: "users",
-      hooks: {
-        beforeCreate: (user) => {
-          user.password = bcrypt.hashSync(
-            user.password,
-            bcrypt.genSaltSync(10)
-          );
-        },
-        beforeUpdate: (user) => {
-          user.password = bcrypt.hashSync(
-            user.password,
-            bcrypt.genSaltSync(10)
-          );
-        },
-      },
-    }
-  );
-  return User;
-};
+  }
+);
+
+export default User;

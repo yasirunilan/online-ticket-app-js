@@ -15,7 +15,7 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: {
-        model: "events",
+        model: "online_events",
         key: "id",
       },
       onUpdate: "CASCADE",

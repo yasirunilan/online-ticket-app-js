@@ -1,7 +1,7 @@
 "use strict";
 /** @type {import('sequelize-cli').Migration} */
 export async function up(queryInterface, Sequelize) {
-  await queryInterface.createTable("WaitingLists", {
+  await queryInterface.createTable("waiting_list_entries", {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -12,7 +12,7 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: {
-        model: "events",
+        model: "online_events",
         key: "id",
       },
       onUpdate: "CASCADE",
@@ -39,5 +39,5 @@ export async function up(queryInterface, Sequelize) {
   });
 }
 export async function down(queryInterface, Sequelize) {
-  await queryInterface.dropTable("WaitingLists");
+  await queryInterface.dropTable("waiting_list_entries");
 }

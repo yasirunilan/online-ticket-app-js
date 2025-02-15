@@ -7,6 +7,12 @@ const login = asyncHandler(async (req, res) => {
   res.status(StatusCodes.OK).json({ token });
 });
 
+const register = asyncHandler(async (req, res) => {
+  const user = await authService.register(req.body);
+  res.status(StatusCodes.CREATED).json({ user });
+});
+
 export default {
   login,
+  register,
 };

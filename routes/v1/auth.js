@@ -71,4 +71,10 @@ router.post(
   authController.login
 );
 
+router.post(
+  "/register",
+  validate(authSchema.registerSchema),
+  authController.register
+);
+
 export default router;
