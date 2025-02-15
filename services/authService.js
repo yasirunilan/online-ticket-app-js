@@ -23,8 +23,8 @@ export class AuthService {
     if (existingUser) {
       throw new ConflictError("User with the same email already exists");
     }
-    const user = User.create(payload);
-    return user;
+    const user = await User.create(payload);
+    return await User.scope("withoutPassword").findByPk(user.id);
   }
 }
 

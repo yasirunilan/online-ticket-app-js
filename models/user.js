@@ -25,6 +25,11 @@ const User = sequelize.define(
   },
   {
     tableName: "users",
+    scopes: {
+      withoutPassword: {
+        attributes: { exclude: ["password"] },
+      },
+    },
     hooks: {
       beforeCreate: async (user) => {
         const salt = await bcrypt.genSalt(10);
